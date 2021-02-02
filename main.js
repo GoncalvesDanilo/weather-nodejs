@@ -15,14 +15,14 @@ function geocoding(city){
     const url = "https://us1.locationiq.com/v1/search.php?key="+ process.env.GEO_API_KEY +"&q="+ city +"&format=json"
 
     if(!city){
-        return console.log("\nPlease enter the name of the city. \n(e.g. 'node main.js Jundiai,BR\n)")
+        return console.log("\nPlease enter the name of the city. \n")
     }
 
     request(url, (error, response, body) => {
         const data = JSON.parse(body)
         
         if(!data[0]){
-            return console.log("Please enter the name of the city. \n(e.g. 'node main.js Jundiai,BR)")
+            return console.error("Error: Couldn't get latitude and longitude. \n")
         }
         lat = (data[0].lat)
         lon = (data[0].lon)
@@ -38,6 +38,11 @@ function weather(lat,lon){
 
     request(url, (error, response, body) => {
         const data = JSON.parse(body)
+
+        if(!data){
+            return console.error("Error: Weather information request failed. \n")
+        }
+
         console.log("\n-=Weather in "+ city +"=-")
         console.log(data.current.weather[0].main+" - "+data.current.weather[0].description)
         console.log("\nTemperature: "+ data.current.temp +"°C")
